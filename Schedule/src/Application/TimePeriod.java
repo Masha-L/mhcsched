@@ -6,6 +6,8 @@ package Application;
 	//
 	// Answer: I think, 00-59 is enough.
 
+	// I am messing with others' master branches, I am a disgrace.
+
 
 /**
  * Provides an abstraction for a single class. 
