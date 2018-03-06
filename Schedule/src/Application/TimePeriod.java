@@ -1,18 +1,11 @@
 package Application;
 
-
-	// QUESTION: Do we want to do decimals for minutes?
-	// We can just make them hour.00-hour.59
-	//
-	// Answer: I think, 00-59 is enough.
-
-
 /**
  * Provides an abstraction for a single class. 
  * Uses 24-hour format to hold the time (0.00 - 23.59) 
  * Uses a short number to hold a day of the week (1 - Mon, 2 - Tue ... 7 - Sun).
  *
- * @author Jack
+ * @author Jack 
  * @version 2
  * @date 3/6/18
  */
