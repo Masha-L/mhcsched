@@ -31,4 +31,7 @@ public class Subject {
 
 	}
 
+	public int getNumNodes() {
+		return lectures.size()*labs.size();
+	}
 }
