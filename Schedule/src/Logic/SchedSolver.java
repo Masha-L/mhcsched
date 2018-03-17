@@ -8,15 +8,17 @@ import Database.Subject;
 public class SchedSolver {
 	// The node matrix
 	private SchedMatrix matrix;
+	// Schedule nodes
+	private ScheduleNode[] schNodes;
 	// Holds the schedule options
-	private ArrayList<ArrayList<Subject>> schedules;
+	private ArrayList<ArrayList<Subject>> schedules; 
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param matrix the node matrix
 	 */
-	public SchedSolver(SchedMatrix matrix) {
+	public SchedSolver(ArrayList<Subject> classes) {
 		
 	}
 	
@@ -45,6 +47,10 @@ public class SchedSolver {
 	 * Finds all the combinations of the classes that fit together
 	 */
 	public void createScheduleList() {
+		
+	}
+
+	private void classesToNodes(ArrayList<Subject> classes) {
 		
 	}
 }

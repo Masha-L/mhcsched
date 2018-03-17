@@ -15,10 +15,18 @@ public class SchedMatrix {
 	 * Constructor
 	 * Takes the list of chosen classes from controller
 	 */
-	public SchedMatrix(ArrayList<Subject> classes) {
+	public SchedMatrix(SchedNode[] nodes) {
 		
 	}
-	
+
+	/**
+	 * 
+	 * @param nodes
+	 */
+	private void buildMatrix(SchedNode[] nodes) {
+
+	}
+
 	/**
 	 * Adds an edge between two nodes
 	 *
