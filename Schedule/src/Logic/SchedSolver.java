@@ -8,16 +8,19 @@ import Database.Subject;
 public class SchedSolver {
 
 	// The adjacentcy matrix
-	private static boolean [][] matrix;
+	private boolean [][] matrix;
 
 	//Holds the degree of vertex in the adjacentcy matrix
-	private static  int[] degrees;
+	private int[] degrees;
 
 	// Holds the schedule options: indexes of the nodes
-	public static ArrayList<int[]> idSubjs;
+	private ArrayList<int[]> schLists;
+	
+	// Holds validity of the subjects (degree + 1 >= minNumSubj)
+	private boolean[] isValidSubject[];
 
 	//Holds the number of the subjects a student wants to take
-	private static int numSubj;
+	private int minNumSubj;
 
 	/**
 	 * Constructor 
@@ -25,16 +28,17 @@ public class SchedSolver {
 	 * @param matrixNew boolean[][] the adjacency matrix
 	 * @param numS int the number of the subjects the student wants to take
 	 */
-	//needs to be checking for the validity of passed args - and throw a mistake/message if they are not valid ?
+	//needs to be checking for the validity of passed args - 
+	//and throw a mistake/message if they are not valid ?
 	public SchedSolver(boolean [][] matrixNew, int numS) {
 		matrix = matrixNew;
-		numSubj = numS;
+		minNumSubj = numS;
 		//creates array with length == the number of the nodes
 		degrees = new int[matrix.length];
 		//fills the array with degrees of each node in the adjacentcy matrix
-		degreeMatrix(numSubj);
+		degreeMatrix(minNumSubj);
 		//creates an empty list for schedule combinations
-		idSubjs = new ArrayList<int[]>();
+		schLists = new ArrayList<int[]>();
 	}
 
 	//заполняет и сразу чекает - valid or not
@@ -43,7 +47,7 @@ public class SchedSolver {
 	 * The index of an elt of the array corresponds to the indexes of the nodes in the matrix
 	 * @param numSubj - int - the number of subjects that the student wants to take
 	 */
-	private static void degreeMatrix(int numSubj)
+	private void degreeMatrix(int numSubj)
 	{
 		//counter of the invalid nodes
 		//change of node validity triggers recursion 
@@ -73,7 +77,7 @@ public class SchedSolver {
 	 * @param row - int row - the number of the node in the matrix
 	 * @return int the degree of the node
 	 */
-	private static int vertexDegree(int row)
+	private int vertexDegree(int row)
 	{
 		//the degree
 		int degree = 0;
@@ -98,7 +102,7 @@ public class SchedSolver {
 	 * @param row - int row represents the number of the row 
 	 * that supposed to become invalid
 	 */
-	private static void setNodeInvalid(int row) {
+	private void setNodeInvalid(int row) {
 		matrix[row][matrix.length] = true;
 	}
 
@@ -107,7 +111,7 @@ public class SchedSolver {
 	 * 
 	 * @param numSubj - int - the number of subjects that the student wants to take
 	 */
-	private static void createScheduleList(int numSubj) {
+	private void createScheduleList(int numSubj) {
 
 		int [] sched = new int[numSubj];
 		traverseGraph(sched, numSubj, validChoiceArr(),0);
@@ -121,7 +125,7 @@ public class SchedSolver {
 	 * @param chFrom int[] that keeps all valid and unused subjects
 	 * @param gen - int the round of recursion
 	 */
-	private static void traverseGraph(int[] sched, int numS,
+	private void traverseGraph(int[] sched, int numS,
 			int[] chFrom, int gen) {
 
 		/*
@@ -141,7 +145,7 @@ public class SchedSolver {
 			//if the combination is complete - add to the list of combinations
 			if(numS==1)
 			{
-				idSubjs.add(sched.clone());
+				schLists.add(sched.clone());
 			}
 
 			//recursion; the number of subj to add decrease, the gen - increases 
@@ -154,7 +158,7 @@ public class SchedSolver {
 	 * Creates an array to choose combinations from
 	 * @return int[] array of indexes to choose schedules from
 	 */
-	private static int[] validChoiceArr()
+	private int[] validChoiceArr()
 	{
 		int[] chooseFrom = new int[countValidSubj(degrees)];
 
@@ -172,7 +176,7 @@ public class SchedSolver {
 	 * @param array - int [] array containing degrees of subjects
 	 * @return int number of valid subjects
 	 */
-	private static int countValidSubj(int [] array)
+	private int countValidSubj(int [] array)
 	{
 		int validSubj = 0;
 		for(int i = 0; i<array.length; i++)
@@ -191,7 +195,7 @@ public class SchedSolver {
 	 * @param validChoiceArr - the array to find a valid element in
 	 * @return  the index of tne first valid in the passed array
 	 */
-	private static int findFirstValid(int[] validChoiceArr) {
+	private int findFirstValid(int[] validChoiceArr) {
 		for(int i = 0; i<validChoiceArr.length; i++)
 		{
 			if(validChoiceArr[i]!=-1)
@@ -205,13 +209,13 @@ public class SchedSolver {
 	 * in idSubjs are interconnected
 	 * If not - deletes such a combination
 	 */
-	private static void verifySchedules()
+	private void verifySchedules()
 	{
-		for(int i = 0; i<idSubjs.size(); i++)
+		for(int i = 0; i<schLists.size(); i++)
 		{
-			if(false==isInterconnected(idSubjs.get(i),0))
+			if(false==isInterconnected(schLists.get(i),0))
 			{
-				idSubjs.remove(i);
+				schLists.remove(i);
 				i--;
 			}
 
@@ -227,7 +231,7 @@ public class SchedSolver {
 	 * @return true if graph is complete
 	 * false if it isn't
 	 */
-	private static boolean isInterconnected(int[] combination, int gen)
+	private boolean isInterconnected(int[] combination, int gen)
 	{
 		//copies a row from adj matrix that
 		//corresponds to the connections of the element with others
@@ -255,10 +259,10 @@ public class SchedSolver {
 	 * Calls all function that needed to be called
 	 *  for scheds construction and veryfiing their validity 
 	 */
-	public static void mainLogic()
+	public void mainLogic()
 	{
 		
-		createScheduleList(numSubj);
+		createScheduleList(minNumSubj);
 		verifySchedules();
 	}
 
