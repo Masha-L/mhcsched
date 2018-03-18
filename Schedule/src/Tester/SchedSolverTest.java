@@ -6,12 +6,12 @@ import Logic.SchedSolver;
 
 public class SchedSolverTest {
 
-	private boolean [][] matrix = new boolean[9][9];
+	private boolean [][] matrix = new boolean[9][9];;
 	private SchedSolver testSched;
 	
 	@Before
 	public void setMatrix() {
-
+		
 		matrix[0][0]=true;
 		matrix[1][1]=true;
 		matrix[2][2]=true;
@@ -54,8 +54,8 @@ public class SchedSolverTest {
 	}
 
 	@Test
-	public void mainLogicTest()
-	{
+	public void mainLogicTest() {
+		
 		setMatrix();
 				
 		SchedSolver testSched = new SchedSolver(matrix, 5);	

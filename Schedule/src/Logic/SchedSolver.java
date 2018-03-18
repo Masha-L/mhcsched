@@ -7,13 +7,11 @@ import Database.Subject;
  */
 public class SchedSolver {
 
-	// The adjacency matrix
-	private boolean [][] matrix;
 	// Holds the schedule options: indexes of the nodes
 	private ArrayList<int[]> schLists;
 
 	// The node matrix
-	private SchedMatrix matrixJ;
+	private SchedMatrix matrix;
 	// Schedule nodes
 	private SchedNode[] schNodes;
 	
@@ -28,8 +26,8 @@ public class SchedSolver {
 	 * @param numS
 	 */
 	public SchedSolver(boolean[][] matrix, int numS) {
-		matrixJ = new SchedMatrix(matrix);
-		matrixJ.assignValidity(numS);	
+		this.matrix = new SchedMatrix(matrix);
+		this.matrix.assignValidity(numS);	
 		schLists = new ArrayList<int[]>();
 		
 		createValidSchedules(numS);
@@ -44,8 +42,8 @@ public class SchedSolver {
 	 */
 	public SchedSolver(ArrayList<Subject> classes, int numS) {
 		classesToNodes(classes);
-		matrixJ = new SchedMatrix(schNodes);
-		matrixJ.assignValidity(numS);	
+		matrix = new SchedMatrix(schNodes);
+		matrix.assignValidity(numS);	
 		schLists = new ArrayList<int[]>();
 
 		createValidSchedules(numS);
@@ -89,10 +87,9 @@ public class SchedSolver {
 	 * @param gen the round of recursion
 	 * @return true if graph is complete, false if it isn't
 	 */
-	private boolean areInterconnected(int[] combination, int gen)
-	{
+	private boolean areInterconnected(int[] combination, int gen) {
 		
-		boolean[] compareTo = matrixJ.getNodeConnections(combination[gen]);
+		boolean[] compareTo = matrix.getNodeConnections(combination[gen]);
 
 		// gen +1 in order not to compare to itself
 		for(int i = gen + 1; i < combination.length; i++)
@@ -117,7 +114,8 @@ public class SchedSolver {
 	 */
 	private void createValidSchedules(int numS) {
 		
-		traverseGraph(new int[numS], matrixJ.validNodes(), numS, 0, 0);	
+		traverseGraph(new int[numS], matrix.validNodes(), numS, 0, 0);	
+		//System.out.println("size: " + schLists.size());
 		
 	}
 
