@@ -1,7 +1,4 @@
 package Logic;
-import java.util.ArrayList;
-
-import Database.Subject;
 
 /**
  * Manages holding the adjacency matrix for the schedule nodes
@@ -16,6 +13,8 @@ public class SchedMatrix {
 	private boolean[] isExcluded;
 	//Holds the degree of vertex in the adjacency matrix
 	private int[] degrees;
+	// Holds the number of valid subjects
+	private int numValid;
 
 	/**
 	 * Constructor IS WRITTEN FOR THE TESTER
@@ -26,6 +25,7 @@ public class SchedMatrix {
 		this.matrix = matrix;
 		degrees = new int[matrix.length];
 		isExcluded = new boolean[matrix.length];
+		numValid = matrix.length;
 	}
 
 	/**
@@ -36,108 +36,9 @@ public class SchedMatrix {
 		buildMatrix(nodes);
 		degrees = new int[matrix.length];
 		isExcluded = new boolean[matrix.length];
+		numValid = matrix.length;
 	}
 
-
-	/**
-	 * Repeatedly counts nodes degrees to determine
-	 * if they can be used in schedules
-	 * @param numS int the number of subjects the student wants to take
-	 */
-	public void	assignValidity(int numS)
-	{
-
-		//counter of the invalid nodes
-		//change of node validity triggers recursion 
-
-		boolean changed = true;
-
-		while(changed)
-		{
-			changed = false;
-			for(int i = 0; i<matrix.length;i++)
-			{
-				if(!isExcluded[i]) {
-					//finds degree of node with index i
-					int degree=vertexDegree(i);
-					if(degree+1<numS)
-					{
-						setNodeInvalid(i);
-						changed=true; 
-					}
-					else
-						degrees[i]=degree;
-				}
-			}
-		}
-	}
-
-	/**
-	 * Calculates the degree of a node from matrix
-	 * @param row - int row - the number of the node in the matrix
-	 * @return int the degree of the node
-	 */
-	private int vertexDegree(int node)
-	{
-		//the degree
-		int degree = 0;
-		//for each 
-		for(int i = 0; i<matrix.length;i++)
-		{	
-			//if the node is valid and there is no conflict with an elt 
-			// increase the degree by 1
-			if(!areInConflict(node,i) && !isExcluded[i])
-				degree++;
-		}
-		return degree;
-	}
-
-	/**
-	 * Sets the node invalid for schedule (invalid == true)
-	 * 
-	 * @param index corresponds to the index of the node in matrix
-	 * that supposed to become invalid
-	 */
-	private void setNodeInvalid(int node) {
-		isExcluded[node] = true;
-		degrees[node]=-1;
-	}
-
-	/**
-	 * Creates an array to choose combinations from
-	 * @return int[] array of indexes to choose schedules from
-	 */
-	public int[] validNodes()
-	{
-		int[] chooseFrom = new int[countValidSubj(new int[2])];
-		int currentIndex = 0;
-		for(int i = 0; i<isExcluded.length; i++)
-		{
-			if(!isExcluded[i])
-			{
-				chooseFrom[currentIndex]=i;
-				currentIndex++;
-			}
-		}
-		return chooseFrom;
-
-	}
-
-	/**
-	 * Counts subjects that are valid for making a schedule 
-	 * @param array - int [] array containing degrees of subjects
-	 * @return int number of valid subjects
-	 */
-	int countValidSubj(int[] array)
-	{
-		int validSubj = 0;
-		for(int i = 0; i<isExcluded.length; i++)
-		{
-			if(!isExcluded[i])
-				validSubj++;
-		}
-		return validSubj;
-	}
 
 	/**
 	 * Fills the adjacency matrix with boolean values 
@@ -146,21 +47,90 @@ public class SchedMatrix {
 	 * @param nodes the list of nodes 
 	 */
 	private void buildMatrix(SchedNode[] nodes) {
-		
+
 		// если колонка == номеру ряда -> поставить 1 
 		// если TP накладываются -> 1 
 
 	}
 
+
 	/**
-	 * Adds an edge between two nodes
-	 * edge stands for conflict between two nodes 
+	 * Repeatedly counts nodes degrees to determine if they can be used in schedules
+	 * 
+	 * @param numS the number of subjects the student wants to take
+	 */
+	public void	assignValidity(int numS){
+		boolean changed = true;
+
+		while(changed) {
+			changed = false;
+			for (int i = 0; i < matrix.length; i++) {
+				if(!isExcluded[i]) {
+					int degree = vertexDegree(i);
+					if (degree + 1 < numS) {
+						setNodeInvalid(i);
+						changed = true; 
+					}
+					else
+						degrees[i] = degree;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Calculates the degree of a node from matrix
+	 * 
+	 * @param row the number of the node in the matrix
+	 * @return the degree of the node
+	 */
+	private int vertexDegree(int node) {
+		int degree = 0;
+		for(int i = 0; i < matrix.length; i++) {	
+			// if the node is valid and there is no conflict with an elt 
+			// increase the degree by 1
+			if(!isExcluded[i] && !areInConflict(node, i))
+				degree++;
+		}
+		return degree;
+	}
+
+	/**
+	 * Sets the node invalid for schedule (invalid == true)
+	 * 
+	 * @param node the node to be set invalid
+	 */
+	private void setNodeInvalid(int node) {
+		isExcluded[node] = true;
+		numValid--;
+	}
+
+	/**
+	 * Creates an array to choose combinations from
+	 * 
+	 * @return array of indexes to choose schedules from
+	 */
+	public int[] validNodes() {
+		int[] chooseFrom = new int[numValid];
+
+		int currentIndex = 0;
+		for (int i = 0; i < isExcluded.length; i++) {
+			if (!isExcluded[i]) {
+				chooseFrom[currentIndex] = i;
+				currentIndex++;
+			}
+		}
+		return chooseFrom;
+	}
+
+	/**
+	 * Adds an edge between two nodes as a conflict between them
 	 * 
 	 * @param oneNode
 	 * @param anotherNode
 	 */
-	private void addEdge(int oneNode, int anotherNode) {
-
+	private void addConflict(int oneNode, int anotherNode) {
+		matrix[oneNode][anotherNode] = true;
 	}
 
 	/**
@@ -169,13 +139,17 @@ public class SchedMatrix {
 	 * @param oneNode
 	 * @param anotherNode
 	 */
-	public boolean areInConflict(int oneNode, int anotherNode) {
-		return false;
+	public boolean areInConflict(int oneNode, int anotherNode) {		
+		return matrix[oneNode][anotherNode];
 	}
 
-	public boolean[] getNodeConnections(int node)
-	{
+	/**
+	 * Returns connections of the node to the others
+	 * 
+	 * @param node 
+	 * @return the array of connections (true for conflict)
+	 */
+	public boolean[] getNodeConnections(int node) {
 		return matrix[node];
 	}
-
 }
