@@ -42,12 +42,13 @@ public class SchedSolver {
 	 * @param numS the number of the subjects the student wants to take
 	 */
 	public SchedSolver(ArrayList<Subject> classes, int numS) {
+		
 		classesToNodes(classes);
-		matrix = new SchedMatrix(schNodes);
-		matrix.assignValidity(numS);	
-		schLists = new ArrayList<int[]>();
+		//matrix = new SchedMatrix(schNodes);
+		//matrix.assignValidity(numS);	
+		//schLists = new ArrayList<int[]>();
 
-		createValidSchedules(numS);
+		//createValidSchedules(numS);
 	}
 
 
@@ -119,16 +120,28 @@ public class SchedSolver {
 		//System.out.println("size: " + schLists.size());
 
 	}
+	
+	// THIS IS WRITTEN FOR THE TESTER
+	public ArrayList<int[]> getSchLists() {
+		return schLists;
+	}
 
 	/**
 	 * Turns the subjects lectures and labs into individual nodes
 	 * 
 	 * @param classes the chosen classes
 	 */
-	private void classesToNodes(ArrayList<Subject> classes) {		
+	private void classesToNodes(ArrayList<Subject> classes) {	
+		
+		schNodes = new  ArrayList<SchedNode>();
+		
 		for (Subject subject : classes) {
 			schNodes.addAll(subject.getAllNodes());
 		}	
+	}
+	
+	public int getNumNodes() {
+		return schNodes.size();
 	}
 
 }

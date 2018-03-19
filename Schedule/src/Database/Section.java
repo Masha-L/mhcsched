@@ -21,7 +21,7 @@ public class Section {
 	 * @param isLab
 	 */
 	public Section(Subject subject, TimePeriod[] classes, boolean isLab) {
-		
+		this.classes = classes;
 	}
 	
 	/**

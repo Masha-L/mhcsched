@@ -32,6 +32,28 @@ public class Subject {
 	public Subject(String name, String description, ArrayList<Section> lectures, ArrayList<Section> labs, int credits) {
 
 	}
+	
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public Subject() {
+		lectures = new ArrayList<Section>();
+		labs = new ArrayList<Section>();
+	}
+
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public void addLectureSection(Section lecture) {
+		lectures.add(lecture);
+	}
+
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public void addLabSection(Section lab) {
+		labs.add(lab);
+	}
 
 	/**
 	 * Returns the list of the subject's nodes
@@ -45,26 +67,26 @@ public class Subject {
 
 		if (lectures.isEmpty()) {
 			for (Section lab : labs) {
-				if (lab.isInteresting()) {
+				//if (lab.isInteresting()) {
 					nodeList.add(new SchedNode(null, lab));
-				}
+				//}
 			}
 		}
 
 		else if (labs.isEmpty()) {
 			for (Section lecture : lectures) {
-				if (lecture.isInteresting()) {
+				//if (lecture.isInteresting()) {
 					nodeList.add(new SchedNode(lecture, null));
-				}
+				//}
 			}
 		}
 
 		else {
 			for (Section lecture : lectures) {
 				for (Section lab : labs) {
-					if (lecture.isInteresting()) {
+					//if (lecture.isInteresting() && lab.isInteresting()) {
 						nodeList.add(new SchedNode(lecture, lab));
-					}
+					//}
 				}
 			}
 		}

@@ -32,4 +32,11 @@ public class TimePeriod {
 	{
 
 	}
+	
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public TimePeriod() {
+		
+	}
 }
