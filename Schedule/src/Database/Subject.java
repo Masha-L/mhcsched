@@ -1,6 +1,8 @@
 package Database;
 import java.util.ArrayList;
 
+import Logic.SchedNode;
+
 /**
  * Holds the information about a subject:
  * the lists of lecture sections and the labs;
@@ -17,7 +19,7 @@ public class Subject {
 	private ArrayList<Section> labs;
 	// The number of credits
 	private int credits;
-		
+
 	/**
 	 * Constructs a subject
 	 * 
@@ -30,8 +32,65 @@ public class Subject {
 	public Subject(String name, String description, ArrayList<Section> lectures, ArrayList<Section> labs, int credits) {
 
 	}
+	
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public Subject() {
+		lectures = new ArrayList<Section>();
+		labs = new ArrayList<Section>();
+	}
 
-	public int getNumNodes() {
-		return lectures.size()*labs.size();
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public void addLectureSection(Section lecture) {
+		lectures.add(lecture);
+	}
+
+	/**
+	 * THIS IS WRITTEN FOR THE TESTER
+	 */
+	public void addLabSection(Section lab) {
+		labs.add(lab);
+	}
+
+	/**
+	 * Returns the list of the subject's nodes
+	 * 
+	 * @precondition: subject has at least one lecture section or one lab
+	 * @return the list of the subject's nodes
+	 */
+	public ArrayList<SchedNode> getAllNodes() {
+
+		ArrayList<SchedNode> nodeList = new ArrayList<SchedNode>();
+
+		if (lectures.isEmpty()) {
+			for (Section lab : labs) {
+				//if (lab.isInteresting()) {
+					nodeList.add(new SchedNode(null, lab));
+				//}
+			}
+		}
+
+		else if (labs.isEmpty()) {
+			for (Section lecture : lectures) {
+				//if (lecture.isInteresting()) {
+					nodeList.add(new SchedNode(lecture, null));
+				//}
+			}
+		}
+
+		else {
+			for (Section lecture : lectures) {
+				for (Section lab : labs) {
+					//if (lecture.isInteresting() && lab.isInteresting()) {
+						nodeList.add(new SchedNode(lecture, lab));
+					//}
+				}
+			}
+		}
+
+		return nodeList;
 	}
 }

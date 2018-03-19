@@ -1,21 +1,22 @@
 package Logic;
-import Database.TimePeriod;
+import Database.Section;
 
 /**
  * 
  */
 public class SchedNode {
-	private TimePeriod[] lectureSection; 
-	private TimePeriod lab;
+	private Section lectureSection; 
+	private Section labSection;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param lectureSection
-	 * @param lab
+	 * @param labSection
 	 */
-	public SchedNode(TimePeriod[] lectureSection, TimePeriod lab) {
-		
+	public SchedNode(Section lectureSection, Section labSection) {
+		this.lectureSection = lectureSection;
+		this.labSection = labSection;
 	}
 
 }

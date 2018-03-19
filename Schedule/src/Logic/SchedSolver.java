@@ -7,16 +7,15 @@ import Database.Subject;
  */
 public class SchedSolver {
 
-
-	// The adjacency matrix
-	private boolean [][] matrix;
 	// Holds the schedule options: indexes of the nodes
 	private ArrayList<int[]> schLists;
 
 	// The node matrix
-	private SchedMatrix matrixJ;
+	private SchedMatrix matrix;
 	// Schedule nodes
-	private SchedNode[] schNodes;
+	//private SchedNode[] schNodes;
+	private ArrayList<SchedNode> schNodes;
+
 	// Holds the schedule options
 	private ArrayList<ArrayList<Subject>> schedules; 
 
@@ -28,9 +27,8 @@ public class SchedSolver {
 	 * @param numS
 	 */
 	public SchedSolver(boolean[][] matrix, int numS) {
-		matrixJ = new SchedMatrix(matrix);
-		matrixJ.assignValidity(numS);	
-		//creates an empty list for schedule combinations
+		this.matrix = new SchedMatrix(matrix);
+		this.matrix.assignValidity(numS);	
 		schLists = new ArrayList<int[]>();
 
 		createValidSchedules(numS);
@@ -44,174 +42,44 @@ public class SchedSolver {
 	 * @param numS the number of the subjects the student wants to take
 	 */
 	public SchedSolver(ArrayList<Subject> classes, int numS) {
+		
 		classesToNodes(classes);
-		matrixJ = new SchedMatrix(schNodes);
-		matrixJ.assignValidity(numS);	
-		//creates an empty list for schedule combinations
-		schLists = new ArrayList<int[]>();
+		//matrix = new SchedMatrix(schNodes);
+		//matrix.assignValidity(numS);	
+		//schLists = new ArrayList<int[]>();
 
-		createValidSchedules(numS);
+		//createValidSchedules(numS);
 	}
 
 
 	/**
 	 * Creates all possible combinations of valid subjects and adds them to the list of schedules
 	 * 
-	 * @param sched 
-	 * @param numS the number of subjects that are yet to be added
+	 * @param sched the current schedule option
 	 * @param chFrom array that keeps all valid and unused subjects
-	 * @param gen the round of recursion
+	 * @param leftToAdd 
+	 * @param gen 
+	 * @param startFrom 
 	 */
-	private void traverseGraph(int[] sched, int leftToAdd, int[] chFrom, int gen) {
+	private void traverseGraph(int[] sched, int[] chFrom, int leftToAdd, int gen, int startFrom) {
 
-		/*
-		 * As long as there are enough valid subjects to finish the combination
-		 * And the subjects need to be added
-		 * And there exists at least one valid subject 
-		 */
-		while(matrixJ.countValidSubj(chFrom) >= leftToAdd && leftToAdd!=0 && findFirstValid(chFrom) != -1)
-		{
-			/*
-			 * side note: pass startFrom instead of checking firstValid =================================== 
-			 */
+		if (gen < sched.length && startFrom < chFrom.length) {
 
-			// set the current elt of the combination to the first valid subject 
-			// from array of the valid subjects
-			sched[gen] = chFrom[findFirstValid(chFrom)];
+			for (int fixedElm = gen; fixedElm < sched.length; fixedElm++) {
+				for (int movingElm = startFrom; movingElm < chFrom.length; movingElm++) {
 
-			// set it == -1 (invalid for further use in this combination)
-			// in the array of the valid subjects 
-			chFrom[findFirstValid(chFrom)] = -1;
+					sched[fixedElm] = chFrom[movingElm];
 
-			// copy the array of the valid subjects to pass through recursion
-			int[] newChFrom = chFrom.clone();
-
-			// if the combination is complete - add to the list of combinations
-			if(leftToAdd == 1)
-			{
-				// VERIFY HERE? ===========================================================================
-				schLists.add(sched.clone());
-			}
-
-			//recursion; the number of subj to add decrease, the gen - increases 
-			traverseGraph(sched, leftToAdd - 1, newChFrom, gen + 1);
-		}
-	}
-
-	private void traverseGraphNew(int[] sched, int leftToAdd, int[] chFrom, int gen) {
-
-		/*
-		 * As long as there are enough valid subjects to finish the combination
-		 * And the subjects need to be added
-		 * And there exists at least one valid subject 
-		 */
-		while(matrixJ.countValidSubj(chFrom) >= leftToAdd && leftToAdd!=0 && findFirstValid(chFrom) != -1)
-		{
-			/*
-			 * side note: pass startFrom instead of checking firstValid =================================== 
-			 */
-
-			// set the current elt of the combination to the first valid subject 
-			// from array of the valid subjects
-			sched[gen] = chFrom[findFirstValid(chFrom)];
-
-			// set it == -1 (invalid for further use in this combination)
-			// in the array of the valid subjects 
-			chFrom[findFirstValid(chFrom)] = -1;
-
-			// copy the array of the valid subjects to pass through recursion
-			int[] newChFrom = chFrom.clone();
-
-			// NEW STEP IN THE ALGORITHM
-			int[] newPrototype = sched.clone();
-
-			// if the combination is complete - add to the list of combinations
-			if(leftToAdd == 1)
-			{
-				if (isInterconnected(newPrototype, 0))// VERIFY HERE? ===========================================================================
-					schLists.add(newPrototype);
-			}
-
-			//recursion; the number of subj to add decrease, the gen - increases 
-			traverseGraph(sched, leftToAdd - 1, newChFrom, gen + 1);
-		}
-	}
-
-	private void traverseGraphNewNew(int[] sched, int leftToAdd, int[] chFrom, int gen) {
-
-		/*
-		 * As long as there are enough valid subjects to finish the combination
-		 * And the subjects need to be added
-		 * And there exists at least one valid subject 
-		 */
-		while(matrixJ.countValidSubj(chFrom) >= leftToAdd && leftToAdd!=0 && findFirstValid(chFrom) != -1)
-		{
-			/*
-			 * side note: pass startFrom instead of checking firstValid =================================== 
-			 */
-
-			// set the current elt of the combination to the first valid subject 
-			// from array of the valid subjects
-			sched[gen] = chFrom[findFirstValid(chFrom)];
-
-			// set it == -1 (invalid for further use in this combination)
-			// in the array of the valid subjects 
-			chFrom[findFirstValid(chFrom)] = -1;
-
-			// copy the array of the valid subjects to pass through recursion
-			int[] newChFrom = chFrom.clone();
-
-			// NEW STEP IN THE ALGORITHM
-			int[] newPrototype = sched.clone();
-
-			// if the combination is complete - add to the list of combinations
-			if(leftToAdd == 1)
-			{
-				System.out.println(123);
-				boolean hui = isInterconnectedNew(newPrototype, 0);
-				if (hui)// VERIFY HERE? ===========================================================================
-					schLists.add(newPrototype);
-			}
-
-			//recursion; the number of subj to add decrease, the gen - increases 
-			traverseGraph(sched, leftToAdd - 1, newChFrom, gen + 1);
-		}
-	}
-
-
-	/**
-	 * Finds first valid element in the passed array 
-	 * Valid means != -1
-	 * 
-	 * @param validChoiceArr the array to find a valid element in
-	 * @return the index of the first valid in the passed array
-	 */
-	private int findFirstValid(int[] validChoiceArr) {
-		for(int i = 0; i<validChoiceArr.length; i++)
-		{
-			if(validChoiceArr[i]!=-1)
-				return i;
-		}
-		return -1;
-	}
-
-	/**
-	 * verifySchedules - verifies that all the combinations of subjects 
-	 * in idSubjs are interconnected
-	 * If not - deletes such a combination
-	 */
-	private void verifySchedules()
-	{
-		for(int i = 0; i<schLists.size(); i++)
-		{
-			if(!isInterconnected(schLists.get(i),0))
-			{
-				schLists.remove(i);
-				i--;
+					if(leftToAdd == 1) {
+						if (areInterconnected(sched, 0)) {
+							schLists.add(sched.clone());
+						}
+					}
+					traverseGraph(sched, chFrom, leftToAdd - 1, fixedElm + 1, movingElm + 1);
+				}
 			}
 		}
 	}
-
 
 	/**
 	 * Checks if the graph is complete
@@ -221,87 +89,59 @@ public class SchedSolver {
 	 * @param gen the round of recursion
 	 * @return true if graph is complete, false if it isn't
 	 */
-	private boolean isInterconnected(int[] combination, int gen)
-	{
-		/*
-		 * copies a row from adj matrix that
-		 * corresponds to the connections of the element with others
-		 * combination[gen] = index of the row in the matrix
-		 */
-		boolean[] compareTo = matrixJ.getNodeConnections(combination[gen]);
+	private boolean areInterconnected(int[] combination, int gen) {
 
-		//gen +1 - in order not to compare to itself
+		boolean[] compareTo = matrix.getNodeConnections(combination[gen]);
+
+		// gen +1 in order not to compare to itself
 		for(int i = gen + 1; i < combination.length; i++)
 		{
-			//if there is a conflict - the combination id not valid, return false 
+			//if there is a conflict - the combination not valid, return false 
 			if(compareTo[combination[i]] == true)
 				return false;
 		}
-		//if the method hasn't checked connections between all the elements 
+		// if the method hasn't checked connections between all the elements 
 		// recursion
 		if( gen < combination.length - 1)
-			return isInterconnected(combination, gen + 1);
+			return areInterconnected(combination, gen + 1);
 
 		return true;
 	}
 
-	private boolean isInterconnectedNew(int[] combination, int gen)
-	{
-		/*
-		 * copies a row from adj matrix that
-		 * corresponds to the connections of the element with others
-		 * combination[gen] = index of the row in the matrix
-		 */
-		boolean[] compareTo = matrixJ.getNodeConnections(combination[gen]);
-
-		//gen +1 - in order not to compare to itself
-		for(int i = gen + 1; i < combination.length; i++)
-		{
-			//if there is a conflict - the combination id not valid, return false 
-			if(matrixJ.areInConflict(gen, i))
-				return false;
-		}
-		//if the method hasn't checked connections between all the elements 
-		// recursion
-		if( gen < combination.length - 1)
-			return isInterconnected(combination, gen + 1);
-
-		return true;
-	}
-	
 	/**
 	 * Traverses the graph to find every combination possible
 	 * and verifies the schedules 
 	 *  
 	 * @param numS 
 	 */
-	private void createValidSchedules(int numS)
-	{
-		long start;
-		
-		/*System.out.println("Old traverse, Old verification");		
-		traverseGraph(new int[numS], numS, matrixJ.validNodes(), 0);
-		verifySchedules();
-		System.out.println("Time: " + (System.nanoTime() - start) + ", " + schLists.size());
-		System.out.println();*/
+	private void createValidSchedules(int numS) {
 
-		System.out.println("New traverse, Old verification");
-		schLists = new ArrayList<int[]>();
-		start = System.nanoTime();
-		traverseGraphNew(new int[numS], numS, matrixJ.validNodes(), 0);
-		System.out.println("Time: " + (System.nanoTime() - start) + ", " + schLists.size());
-		System.out.println();
-		
-		System.out.println("New traverse, new verification");
-		schLists = new ArrayList<int[]>();
-		start = System.nanoTime();
-		traverseGraphNewNew(new int[numS], numS, matrixJ.validNodes(), 0);
-		System.out.println("Time: " + (System.nanoTime() - start) + ", " + schLists.size());
+		traverseGraph(new int[numS], matrix.validNodes(), numS, 0, 0);	
+		//System.out.println("size: " + schLists.size());
+
+	}
+	
+	// THIS IS WRITTEN FOR THE TESTER
+	public ArrayList<int[]> getSchLists() {
+		return schLists;
 	}
 
-
-	private void classesToNodes(ArrayList<Subject> classes) {
-
+	/**
+	 * Turns the subjects lectures and labs into individual nodes
+	 * 
+	 * @param classes the chosen classes
+	 */
+	private void classesToNodes(ArrayList<Subject> classes) {	
+		
+		schNodes = new  ArrayList<SchedNode>();
+		
+		for (Subject subject : classes) {
+			schNodes.addAll(subject.getAllNodes());
+		}	
+	}
+	
+	public int getNumNodes() {
+		return schNodes.size();
 	}
 
 }
