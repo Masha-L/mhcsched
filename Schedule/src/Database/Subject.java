@@ -1,6 +1,8 @@
 package Database;
 import java.util.ArrayList;
 
+import Logic.SchedNode;
+
 /**
  * Holds the information about a subject:
  * the lists of lecture sections and the labs;
@@ -17,7 +19,7 @@ public class Subject {
 	private ArrayList<Section> labs;
 	// The number of credits
 	private int credits;
-		
+
 	/**
 	 * Constructs a subject
 	 * 
@@ -31,7 +33,42 @@ public class Subject {
 
 	}
 
-	public int getNumNodes() {
-		return lectures.size()*labs.size();
+	/**
+	 * Returns the list of the subject's nodes
+	 * 
+	 * @precondition: subject has at least one lecture section or one lab
+	 * @return the list of the subject's nodes
+	 */
+	public ArrayList<SchedNode> getAllNodes() {
+
+		ArrayList<SchedNode> nodeList = new ArrayList<SchedNode>();
+
+		if (lectures.isEmpty()) {
+			for (Section lab : labs) {
+				if (lab.isInteresting()) {
+					nodeList.add(new SchedNode(null, lab));
+				}
+			}
+		}
+
+		else if (labs.isEmpty()) {
+			for (Section lecture : lectures) {
+				if (lecture.isInteresting()) {
+					nodeList.add(new SchedNode(lecture, null));
+				}
+			}
+		}
+
+		else {
+			for (Section lecture : lectures) {
+				for (Section lab : labs) {
+					if (lecture.isInteresting()) {
+						nodeList.add(new SchedNode(lecture, lab));
+					}
+				}
+			}
+		}
+
+		return nodeList;
 	}
 }

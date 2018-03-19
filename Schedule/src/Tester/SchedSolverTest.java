@@ -54,7 +54,7 @@ public class SchedSolverTest {
 	}
 
 	@Test
-	public void mainLogicTest() {
+	public void algorithmTest() {
 		
 		setMatrix();
 				

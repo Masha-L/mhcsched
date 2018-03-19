@@ -13,8 +13,9 @@ public class SchedSolver {
 	// The node matrix
 	private SchedMatrix matrix;
 	// Schedule nodes
-	private SchedNode[] schNodes;
-	
+	//private SchedNode[] schNodes;
+	private ArrayList<SchedNode> schNodes;
+
 	// Holds the schedule options
 	private ArrayList<ArrayList<Subject>> schedules; 
 
@@ -29,7 +30,7 @@ public class SchedSolver {
 		this.matrix = new SchedMatrix(matrix);
 		this.matrix.assignValidity(numS);	
 		schLists = new ArrayList<int[]>();
-		
+
 		createValidSchedules(numS);
 	}
 
@@ -60,14 +61,14 @@ public class SchedSolver {
 	 * @param startFrom 
 	 */
 	private void traverseGraph(int[] sched, int[] chFrom, int leftToAdd, int gen, int startFrom) {
-	
+
 		if (gen < sched.length && startFrom < chFrom.length) {
-			
+
 			for (int fixedElm = gen; fixedElm < sched.length; fixedElm++) {
 				for (int movingElm = startFrom; movingElm < chFrom.length; movingElm++) {
-					
+
 					sched[fixedElm] = chFrom[movingElm];
-					
+
 					if(leftToAdd == 1) {
 						if (areInterconnected(sched, 0)) {
 							schLists.add(sched.clone());
@@ -88,7 +89,7 @@ public class SchedSolver {
 	 * @return true if graph is complete, false if it isn't
 	 */
 	private boolean areInterconnected(int[] combination, int gen) {
-		
+
 		boolean[] compareTo = matrix.getNodeConnections(combination[gen]);
 
 		// gen +1 in order not to compare to itself
@@ -113,15 +114,21 @@ public class SchedSolver {
 	 * @param numS 
 	 */
 	private void createValidSchedules(int numS) {
-		
+
 		traverseGraph(new int[numS], matrix.validNodes(), numS, 0, 0);	
 		//System.out.println("size: " + schLists.size());
-		
+
 	}
 
-
-	private void classesToNodes(ArrayList<Subject> classes) {
-
+	/**
+	 * Turns the subjects lectures and labs into individual nodes
+	 * 
+	 * @param classes the chosen classes
+	 */
+	private void classesToNodes(ArrayList<Subject> classes) {		
+		for (Subject subject : classes) {
+			schNodes.addAll(subject.getAllNodes());
+		}	
 	}
 
 }

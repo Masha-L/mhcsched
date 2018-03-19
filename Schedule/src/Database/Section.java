@@ -30,7 +30,16 @@ public class Section {
 	 * @param interesting true if interesting
 	 */
 	public void setInteresting(boolean interesting) {
-		
+		isInteresting = interesting;
+	}
+	
+	/**
+	 * Sets the section interesting/not interesting to the user
+	 * 
+	 * @param interesting true if interesting
+	 */
+	public boolean isInteresting() {
+		return isInteresting;
 	}
 
 }

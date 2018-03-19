@@ -1,5 +1,7 @@
 package Logic;
 
+import java.util.ArrayList;
+
 /**
  * Manages holding the adjacency matrix for the schedule nodes
  *
@@ -29,16 +31,16 @@ public class SchedMatrix {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor WHICH I HAVE BECAUSE MY CODE IS A LIE
 	 * Takes the list of chosen classes from controller
 	 */
-	public SchedMatrix(SchedNode[] nodes) {
+	public SchedMatrix(ArrayList<SchedNode> nodes) {
 		buildMatrix(nodes);
 		degrees = new int[matrix.length];
 		isExcluded = new boolean[matrix.length];
 		numValid = matrix.length;
 	}
-
+	
 
 	/**
 	 * Fills the adjacency matrix with boolean values 
@@ -46,7 +48,7 @@ public class SchedMatrix {
 	 * 
 	 * @param nodes the list of nodes 
 	 */
-	private void buildMatrix(SchedNode[] nodes) {
+	private void buildMatrix(ArrayList<SchedNode> nodes) {
 
 		// если колонка == номеру ряда -> поставить 1 
 		// если TP накладываются -> 1 
