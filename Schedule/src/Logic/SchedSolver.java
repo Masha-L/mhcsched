@@ -44,7 +44,7 @@ public class SchedSolver {
 	public SchedSolver(ArrayList<Subject> classes, int numS) {
 		
 		classesToNodes(classes);
-		//matrix = new SchedMatrix(schNodes);
+		matrix = new SchedMatrix(schNodes);
 		//matrix.assignValidity(numS);	
 		//schLists = new ArrayList<int[]>();
 
@@ -101,7 +101,7 @@ public class SchedSolver {
 			if (compareTo[combination[i]] == true)
 				return false;
 		}
-		//  if the method hasn't checked all the elements, recursion
+		// if the method hasn't checked all the elements, recursion
 		if (gen < combination.length - 1)
 			return areInterconnected(combination, gen + 1);
 

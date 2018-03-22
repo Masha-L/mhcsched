@@ -33,12 +33,19 @@ public class SchedMatrix {
 	/**
 	 * Constructor WHICH I HAVE BECAUSE MY CODE IS A LIE
 	 * Takes the list of chosen classes from controller
+	 * 
+	 * @param nodes the list of the schedule nodes
 	 */
-	public SchedMatrix(ArrayList<SchedNode> nodes) {
+	public SchedMatrix(ArrayList<SchedNode> nodes) {	
+		
+		// THE LIST IS EXPECTED TO BE ORDERED
+		
+		int numNodes = nodes.size();		
+		
 		buildMatrix(nodes);
-		degrees = new int[matrix.length];
-		isExcluded = new boolean[matrix.length];
-		numValid = matrix.length;
+		degrees = new int[numNodes];
+		isExcluded = new boolean[numNodes];
+		numValid = numNodes;
 	}
 	
 
@@ -49,6 +56,8 @@ public class SchedMatrix {
 	 * @param nodes the list of nodes 
 	 */
 	private void buildMatrix(ArrayList<SchedNode> nodes) {
+		
+		// THE LIST IS EXPECTED TO BE ORDERED
 
 		// если колонка == номеру ряда -> поставить 1 
 		// если TP накладываются -> 1 
