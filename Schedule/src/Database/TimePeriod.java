@@ -68,8 +68,4 @@ public class TimePeriod {
 	public short getWeekDay() {
 		return weekDay;
 	}
-
-
-	
-
 }

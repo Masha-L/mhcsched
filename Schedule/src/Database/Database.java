@@ -13,7 +13,7 @@ public class Database {
 	 * that are offered by this department
 	 */
 	private Hashtable <String, Department> classes;
-	
+
 	/**
 	 * Instantiates the database.
 	 * 
@@ -27,15 +27,15 @@ public class Database {
 	public Database(File database) {
 		// initialize the hashtable
 	}
-	
-	
-	
-/**
- *  Adds departments in the table 
- * @return the list of depNames
- */
+
+
+
+	/**
+	 *  Adds departments in the table 
+	 * @return the list of depNames
+	 */
 	public ArrayList<String> addDepartments() {
-		
+
 		// makes XML reader read the list of the department
 		/* at this point it's empty - we just read the department 
 		 * and create empty department class to be filled later */
@@ -43,7 +43,7 @@ public class Database {
 		// before adding reads the name of the department and makes it a key
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @param depName
@@ -54,7 +54,7 @@ public class Database {
 		//calls XML reader to read the classes of a specific department 
 		//and all the information about them to create a subject
 	}
-	
+
 	/**
 	 * Searches hashtable for the list of classes by department's name
 	 * 
