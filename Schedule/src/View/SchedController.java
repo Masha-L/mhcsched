@@ -1,4 +1,6 @@
 package View;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import Database.Database;
 
@@ -13,6 +15,8 @@ public class SchedController extends JPanel{
 	// The subject database
 	private Database database;
 	
+	//the list of the departments
+	private ArrayList<String> depNames;
 	
 	/**
 	 * Creates a new controller for the app
