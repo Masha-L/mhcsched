@@ -57,6 +57,8 @@ public class SchedMatrix {
 
 
 	/**
+	 * ========================== SPLIT ==============================================
+	 * 
 	 * Repeatedly counts nodes degrees to determine if they can be used in schedules
 	 * 
 	 * @param numS the number of subjects the student wants to take

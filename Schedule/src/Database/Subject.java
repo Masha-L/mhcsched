@@ -32,7 +32,7 @@ public class Subject {
 	public Subject(String name, String description, ArrayList<Section> lectures, ArrayList<Section> labs, int credits) {
 
 	}
-	
+
 	/**
 	 * THIS IS WRITTEN FOR THE TESTER
 	 */
@@ -65,29 +65,28 @@ public class Subject {
 
 		ArrayList<SchedNode> nodeList = new ArrayList<SchedNode>();
 
-		//
-		if (lectures.isEmpty()) {
-			for (Section lab : labs) {
-				//if (lab.isInteresting()) {
-					nodeList.add(new SchedNode(null, lab));
-				//}
-			}
-		}
-
-		else if (labs.isEmpty()) {
-			for (Section lecture : lectures) {
-				//if (lecture.isInteresting()) {
-					nodeList.add(new SchedNode(lecture, null));
-				//}
-			}
+		if (lectures.isEmpty() && labs.isEmpty()) {
+			nodeList.add(new SchedNode());
 		}
 
 		else {
-			for (Section lecture : lectures) {
+			if (lectures.isEmpty()) {
 				for (Section lab : labs) {
-					//if (lecture.isInteresting() && lab.isInteresting()) {
+					nodeList.add(new SchedNode(null, lab));
+				}
+			}
+
+			else if (labs.isEmpty()) {
+				for (Section lecture : lectures) {
+					nodeList.add(new SchedNode(lecture, null));
+				}
+			}
+
+			else {
+				for (Section lecture : lectures) {
+					for (Section lab : labs) {
 						nodeList.add(new SchedNode(lecture, lab));
-					//}
+					}
 				}
 			}
 		}

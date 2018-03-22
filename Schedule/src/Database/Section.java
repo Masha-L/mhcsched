@@ -8,7 +8,7 @@ public class Section {
 	private TimePeriod[] classes;
 	
 	// Checks if the user has chosen the section
-	private boolean isInteresting;
+	private boolean isChosen;
 	
 	// Subject reference
 	private Subject subject;
@@ -28,21 +28,19 @@ public class Section {
 	}
 	
 	/**
-	 * Sets the section interesting/not interesting to the user
+	 * Sets the section chosen/not chosen
 	 * 
-	 * @param interesting true if interesting
+	 * @param chosen true if chosen
 	 */
-	public void setInteresting(boolean interesting) {
-		isInteresting = interesting;
+	public void setInteresting(boolean chosen) {
+		isChosen = chosen;
 	}
 	
 	/**
-	 * Sets the section interesting/not interesting to the user
-	 * 
-	 * @param interesting true if interesting
+	 * Sets the section chosen/not chosen
 	 */
-	public boolean isInteresting() {
-		return isInteresting;
+	public boolean isChosen() {
+		return isChosen;
 	}
 
 }

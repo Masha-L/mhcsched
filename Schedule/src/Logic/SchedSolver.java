@@ -53,6 +53,8 @@ public class SchedSolver {
 
 
 	/**
+	 * ======================================== SPLIT ===========================
+	 * 
 	 * Creates all possible combinations of valid subjects and adds them to the list of schedules
 	 * 
 	 * @param sched the current schedule option
@@ -85,7 +87,7 @@ public class SchedSolver {
 	 * Checks if the graph is complete
 	 * Employs recursion to compare subject with all subsequent ones
 	 * 
-	 * @param combination of sched nodes (vertexes of a graph) 
+	 * @param combination of schedule nodes (vertexes of a graph) 
 	 * @param gen the round of recursion
 	 * @return true if graph is complete, false if it isn't
 	 */
@@ -93,16 +95,14 @@ public class SchedSolver {
 
 		boolean[] compareTo = matrix.getNodeConnections(combination[gen]);
 
-		// gen +1 in order not to compare to itself
-		for(int i = gen + 1; i < combination.length; i++)
-		{
+		// gen+1 in order not to compare to itself
+		for (int i = gen + 1; i < combination.length; i++) {
 			//if there is a conflict - the combination not valid, return false 
-			if(compareTo[combination[i]] == true)
+			if (compareTo[combination[i]] == true)
 				return false;
 		}
-		// if the method hasn't checked connections between all the elements 
-		// recursion
-		if( gen < combination.length - 1)
+		// if the method hasn't checked all the elements, recursion
+		if (gen < combination.length - 1)
 			return areInterconnected(combination, gen + 1);
 
 		return true;
@@ -133,13 +133,19 @@ public class SchedSolver {
 	 */
 	private void classesToNodes(ArrayList<Subject> classes) {	
 		
-		schNodes = new  ArrayList<SchedNode>();
+		schNodes = new ArrayList<SchedNode>();
 		
 		for (Subject subject : classes) {
 			schNodes.addAll(subject.getAllNodes());
 		}	
 	}
 	
+	/**
+	 * kakaya-to huinya 
+	 * ya ne znayu zachem eto
+	 * 
+	 * @return
+	 */
 	public int getNumNodes() {
 		return schNodes.size();
 	}
