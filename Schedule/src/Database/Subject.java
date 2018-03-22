@@ -65,6 +65,7 @@ public class Subject {
 
 		ArrayList<SchedNode> nodeList = new ArrayList<SchedNode>();
 
+		//
 		if (lectures.isEmpty()) {
 			for (Section lab : labs) {
 				//if (lab.isInteresting()) {

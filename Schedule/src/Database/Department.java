@@ -5,10 +5,12 @@ import java.util.ArrayList;
  * Holds the name of the department and the list of offered classes
  */
 public class Department {
+	
 	// The department's name
 	private String name;
+	
 	// The list of classes (sorted in numerical order)
-	private ArrayList<Subject> classes;
+	private ArrayList <Subject> classes;
 	
 	/**
 	 * Creates a department 
@@ -29,6 +31,7 @@ public class Department {
 		
 		return null;
 	}
+	
 	
 	/**
 	 * Adds a new subject to the department's list
