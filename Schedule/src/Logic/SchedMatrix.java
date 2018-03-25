@@ -38,8 +38,6 @@ public class SchedMatrix {
 	 */
 	public SchedMatrix(ArrayList<SchedNode> nodes) {	
 
-		// THE LIST IS EXPECTED TO BE ORDERED
-
 		int numNodes = nodes.size();		
 
 		buildMatrix(nodes);
@@ -67,8 +65,13 @@ public class SchedMatrix {
 				anotherNode = nodes.get(col);
 				if (node.conflicts(anotherNode)) {
 					addConflict(row, col);
+					System.out.print("1");
+				}
+				else {
+					System.out.print("0");
 				}
 			}
+			System.out.println("");
 		}
 	}
 

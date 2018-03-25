@@ -115,8 +115,6 @@ public class SchedSolver {
 	private void createValidSchedules(int numS) {
 
 		traverseGraph(new int[numS], matrix.validNodes(), numS, 0, 0);	
-		//System.out.println("size: " + schLists.size());
-
 	}
 	
 	// THIS IS WRITTEN FOR THE TESTER

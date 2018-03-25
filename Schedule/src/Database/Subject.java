@@ -67,20 +67,20 @@ public class Subject {
 
 		if (lectures.isEmpty()) {
 			for (Section lab : labs) {
-				nodeList.add(new SchedNode(null, lab));
+				nodeList.add(new SchedNode(null, lab, this));
 			}
 		}
 
 		else if (labs.isEmpty()) {
 			for (Section lecture : lectures) {
-				nodeList.add(new SchedNode(lecture, null));
+				nodeList.add(new SchedNode(lecture, null, this));
 			}
 		}
 
 		else {
 			for (Section lecture : lectures) {
 				for (Section lab : labs) {
-					nodeList.add(new SchedNode(lecture, lab));
+					nodeList.add(new SchedNode(lecture, lab, this));
 				}
 			}
 		}
