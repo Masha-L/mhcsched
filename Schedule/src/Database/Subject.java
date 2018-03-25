@@ -65,28 +65,22 @@ public class Subject {
 
 		ArrayList<SchedNode> nodeList = new ArrayList<SchedNode>();
 
-		if (lectures.isEmpty() && labs.isEmpty()) {
-			nodeList.add(new SchedNode());
+		if (lectures.isEmpty()) {
+			for (Section lab : labs) {
+				nodeList.add(new SchedNode(null, lab));
+			}
+		}
+
+		else if (labs.isEmpty()) {
+			for (Section lecture : lectures) {
+				nodeList.add(new SchedNode(lecture, null));
+			}
 		}
 
 		else {
-			if (lectures.isEmpty()) {
+			for (Section lecture : lectures) {
 				for (Section lab : labs) {
-					nodeList.add(new SchedNode(null, lab));
-				}
-			}
-
-			else if (labs.isEmpty()) {
-				for (Section lecture : lectures) {
-					nodeList.add(new SchedNode(lecture, null));
-				}
-			}
-
-			else {
-				for (Section lecture : lectures) {
-					for (Section lab : labs) {
-						nodeList.add(new SchedNode(lecture, lab));
-					}
+					nodeList.add(new SchedNode(lecture, lab));
 				}
 			}
 		}
