@@ -11,8 +11,6 @@ public class SchedMatrix {
 	//the length of each row = num of classes + 1; 
 	//last column - valid or not valid
 	private boolean[][] matrix;
-	// Holds validity of the subjects (degree + 1 >= minNumSubj)
-	private boolean[] isExcluded;
 	//Holds the degree of vertex in the adjacency matrix
 	private int[] degrees;
 	// Holds the number of valid subjects
@@ -26,12 +24,11 @@ public class SchedMatrix {
 	public SchedMatrix(boolean[][] matrix) {
 		this.matrix = matrix;
 		degrees = new int[matrix.length];
-		isExcluded = new boolean[matrix.length];
 		numValid = matrix.length;
 	}
 
 	/**
-	 * Constructor WHICH I HAVE BECAUSE MY CODE IS A LIE
+	 * Constructor for the matrix
 	 * Takes the list of chosen classes from controller
 	 * 
 	 * @param nodes the list of the schedule nodes
@@ -42,7 +39,6 @@ public class SchedMatrix {
 
 		buildMatrix(nodes);
 		degrees = new int[numNodes];
-		isExcluded = new boolean[numNodes];
 		numValid = numNodes;
 	}
 
@@ -87,6 +83,7 @@ public class SchedMatrix {
 
 		while(changed) {
 			changed = false;
+			// Checks if any nodes became invalid during the last iteration
 			for (int index = 0; index < matrix.length; index++) {
 				if (becameInvalid(index, numS)) {
 					changed = true;
@@ -102,19 +99,19 @@ public class SchedMatrix {
 	 * desired number of classes. 
 	 * Updates the degree if appropriate, otherwise sets the node invalid
 	 * 
-	 * @param index
+	 * @param node
 	 * @param numS
-	 * @return false if the node 
+	 * @return false if the node did not become invalid
 	 */
-	private boolean becameInvalid(int index, int numS) {
-		if(!isExcluded[index]) {
-			int degree = vertexDegree(index);		
+	private boolean becameInvalid(int node, int numS) {
+		if(isValid(node)) {
+			int degree = vertexDegree(node);		
 			if (degree + 1 < numS) {
-				setNodeInvalid(index);
+				setNodeInvalid(node);
 				return true;
 			}
 			else
-				degrees[index] = degree;
+				degrees[node] = degree;
 		}
 		return false;
 	}
@@ -128,9 +125,7 @@ public class SchedMatrix {
 	private int vertexDegree(int node) {
 		int degree = 0;
 		for(int i = 0; i < matrix.length; i++) {	
-			// if the node is valid and there is no conflict with an elt 
-			// increase the degree by 1
-			if(!isExcluded[i] && !areInConflict(node, i))
+			if(isValid(node) && !areInConflict(node, i))
 				degree++;
 		}
 		return degree;
@@ -142,8 +137,12 @@ public class SchedMatrix {
 	 * @param node the node to be set invalid
 	 */
 	private void setNodeInvalid(int node) {
-		isExcluded[node] = true;
+		degrees[node] = -1;
 		numValid--;
+	}
+	
+	private boolean isValid(int node) {
+		return degrees[node] != -1;
 	}
 
 	/**
@@ -155,9 +154,9 @@ public class SchedMatrix {
 		int[] chooseFrom = new int[numValid];
 
 		int currentIndex = 0;
-		for (int i = 0; i < isExcluded.length; i++) {
-			if (!isExcluded[i]) {
-				chooseFrom[currentIndex] = i;
+		for (int node = 0; node < isExcluded.length; node++) {
+			if (isValid(node)) {
+				chooseFrom[currentIndex] = node;
 				currentIndex++;
 			}
 		}
