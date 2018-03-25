@@ -1,10 +1,11 @@
 package Logic;
 import Database.Section;
+import Database.Subject;
 
 public class SchedNode {
 	private Section lectureSection; 
 	private Section labSection;
-	private boolean unscheduled;
+	private Subject subject;
 	
 	/**
 	 * Constructor
@@ -18,9 +19,12 @@ public class SchedNode {
 	}
 	
 	/**
-	 * Constructor for the single node for the unscheduled subject
+	 * Checks if the node conflicts with this one
+	 * 
+	 * @param node
+	 * @return true if there is a conflict
 	 */
-	public SchedNode() {
-		unscheduled = true;
+	public boolean conflicts(SchedNode node) {
+		return false;
 	}
 }

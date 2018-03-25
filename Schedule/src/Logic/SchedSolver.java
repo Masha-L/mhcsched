@@ -45,16 +45,14 @@ public class SchedSolver {
 		
 		classesToNodes(classes);
 		matrix = new SchedMatrix(schNodes);
-		//matrix.assignValidity(numS);	
-		//schLists = new ArrayList<int[]>();
+		matrix.assignValidity(numS);	
+		schLists = new ArrayList<int[]>();
 
-		//createValidSchedules(numS);
+		createValidSchedules(numS);
 	}
 
 
 	/**
-	 * ======================================== SPLIT ===========================
-	 * 
 	 * Creates all possible combinations of valid subjects and adds them to the list of schedules
 	 * 
 	 * @param sched the current schedule option
@@ -67,17 +65,17 @@ public class SchedSolver {
 
 		if (gen < sched.length && startFrom < chFrom.length) {
 
-			for (int fixedElm = gen; fixedElm < sched.length; fixedElm++) {
-				for (int movingElm = startFrom; movingElm < chFrom.length; movingElm++) {
+			for (int newElm = gen; newElm < sched.length; newElm++) {
+				for (int nextElm = startFrom; nextElm < chFrom.length; nextElm++) {
 
-					sched[fixedElm] = chFrom[movingElm];
+					sched[newElm] = chFrom[nextElm];
 
-					if(leftToAdd == 1) {
+					if (leftToAdd == 1) {
 						if (areInterconnected(sched, 0)) {
 							schLists.add(sched.clone());
 						}
 					}
-					traverseGraph(sched, chFrom, leftToAdd - 1, fixedElm + 1, movingElm + 1);
+					traverseGraph(sched, chFrom, leftToAdd - 1, newElm + 1, nextElm + 1);
 				}
 			}
 		}

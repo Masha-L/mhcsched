@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class SchedMatrix {
 	// The adjacency matrix 
-	//the length of each row = num of classes+1; 
+	//the length of each row = num of classes + 1; 
 	//last column - valid or not valid
 	private boolean[][] matrix;
 	// Holds validity of the subjects (degree + 1 >= minNumSubj)
@@ -37,17 +37,17 @@ public class SchedMatrix {
 	 * @param nodes the list of the schedule nodes
 	 */
 	public SchedMatrix(ArrayList<SchedNode> nodes) {	
-		
+
 		// THE LIST IS EXPECTED TO BE ORDERED
-		
+
 		int numNodes = nodes.size();		
-		
+
 		buildMatrix(nodes);
 		degrees = new int[numNodes];
 		isExcluded = new boolean[numNodes];
 		numValid = numNodes;
 	}
-	
+
 
 	/**
 	 * Fills the adjacency matrix with boolean values 
@@ -57,38 +57,63 @@ public class SchedMatrix {
 	 */
 	private void buildMatrix(ArrayList<SchedNode> nodes) {
 		
-		// THE LIST IS EXPECTED TO BE ORDERED
-
-		// если колонка == номеру ряда -> поставить 1 
-		// если TP накладываются -> 1 
-
+		int matrixSize = nodes.size();	
+		matrix = new boolean[matrixSize][matrixSize];
+		
+		SchedNode node, anotherNode;		
+		for (int row = 0; row < matrixSize; row++) {
+			node = nodes.get(row);
+			for (int col = 0; col < matrixSize; col++) {
+				anotherNode = nodes.get(col);
+				if (node.conflicts(anotherNode)) {
+					addConflict(row, col);
+				}
+			}
+		}
 	}
 
 
 	/**
-	 * ========================== SPLIT ==============================================
-	 * 
 	 * Repeatedly counts nodes degrees to determine if they can be used in schedules
 	 * 
 	 * @param numS the number of subjects the student wants to take
 	 */
 	public void	assignValidity(int numS){
+		// True if iteration is not over
 		boolean changed = true;
 
 		while(changed) {
 			changed = false;
-			for (int i = 0; i < matrix.length; i++) {
-				if(!isExcluded[i]) {
-					int degree = vertexDegree(i);
-					if (degree + 1 < numS) {
-						setNodeInvalid(i);
-						changed = true; 
-					}
-					else
-						degrees[i] = degree;
+			for (int index = 0; index < matrix.length; index++) {
+				if (becameInvalid(index, numS)) {
+					changed = true;
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * Increases the node's degree if appropriate or sets it as invalid
+	 * Calculates the current degree of the node and compares it to the 
+	 * desired number of classes. 
+	 * Updates the degree if appropriate, otherwise sets the node invalid
+	 * 
+	 * @param index
+	 * @param numS
+	 * @return false if the node 
+	 */
+	private boolean becameInvalid(int index, int numS) {
+		if(!isExcluded[index]) {
+			int degree = vertexDegree(index);		
+			if (degree + 1 < numS) {
+				setNodeInvalid(index);
+				return true;
+			}
+			else
+				degrees[index] = degree;
+		}
+		return false;
 	}
 
 	/**
