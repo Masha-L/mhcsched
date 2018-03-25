@@ -32,29 +32,34 @@ public class TimePeriod {
 	{
 
 	}
-	
+
 	/**
 	 * THIS IS WRITTEN FOR THE TESTER
 	 */
 	public TimePeriod() {
-		
+
 	}
-	
+
 	/**
 	 * Checks if two classes overlap
-	 * @param first TimePeriod
-	 * @param second TimePeriod
+	 * 
+	 * @param timePeriod another time period 
 	 * @return true if they overlap and false if they do not
 	 */
-	public boolean doOverlap(TimePeriod first, TimePeriod second)
-	{
-		if(first.getWeekDay()!=second.getWeekDay())
-			return false;
-		if(first.getStartTime()<second.getEndTime()&&first.getStartTime()>second.getStartTime())
-			return true;
-		if(second.getStartTime()<first.getEndTime()&&second.getStartTime()>first.getStartTime())
-			return true;
+	public boolean overlap(TimePeriod timePeriod) {
+
+		// We probably will need a buffer time margin
+		
+		// NO EQUAL SIGNS until time periods actually have times
+		
+		if (weekDay == timePeriod.getWeekDay()) {
+			if (startTime < timePeriod.getEndTime() && startTime > timePeriod.getStartTime())
+				return true;
+			if (timePeriod.getStartTime() < endTime && timePeriod.getStartTime() > startTime)
+				return true;
+		}
 		return false;
+		
 	}
 
 	public double getStartTime() {

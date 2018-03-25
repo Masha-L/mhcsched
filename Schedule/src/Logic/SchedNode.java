@@ -1,12 +1,13 @@
 package Logic;
 import Database.Section;
 import Database.Subject;
+import Database.TimePeriod;
 
 public class SchedNode {
 	private Section lectureSection; 
 	private Section labSection;
 	private Subject subject;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -19,7 +20,7 @@ public class SchedNode {
 		this.labSection = labSection;
 		this.subject = subject;
 	}
-	
+
 	/**
 	 * Returns the subject of the node
 	 * 
@@ -28,7 +29,26 @@ public class SchedNode {
 	public Subject getSubject() {
 		return subject;
 	}
-	
+
+	/**
+	 * Returns the lecture section
+	 * 
+	 * @return lectureSection
+	 */
+	public Section getLectureSection() {
+		return lectureSection;
+	}
+
+	/**
+	 * Returns the lab section
+	 * 
+	 * @return labSection
+	 */
+	public Section getLabSection() {
+		return labSection;
+	}
+
+
 	/**
 	 * Checks if the node conflicts with this one
 	 * 
@@ -36,11 +56,29 @@ public class SchedNode {
 	 * @return true if there is a conflict
 	 */
 	public boolean conflicts(SchedNode node) {
-		
-		if (subject.equals(node.getSubject())) {
+
+		if (subject.equals(node.getSubject())) 
 			return true;
-		}
-		
+
+		Section lectures = node.getLectureSection();
+		Section labs = node.getLabSection();
+
+		if (lectureSection != null && lectures != null)
+			if (lectureSection.conflicts(lectures))
+				return true;
+
+		if (lectureSection != null && labs != null)
+			if (lectureSection.conflicts(labs))
+				return true;
+
+		if (labSection != null && lectures != null)
+			if (labSection.conflicts(lectures)) 
+				return true;
+
+		if (labSection != null && labs != null)
+			if (labSection.conflicts(labs)) 
+				return true;
+
 		return false;
 	}
 }
