@@ -36,7 +36,6 @@ public class SchedMatrix {
 	public SchedMatrix(ArrayList<SchedNode> nodes) {	
 
 		int numNodes = nodes.size();		
-
 		buildMatrix(nodes);
 		degrees = new int[numNodes];
 		numValid = numNodes;
@@ -154,7 +153,7 @@ public class SchedMatrix {
 		int[] chooseFrom = new int[numValid];
 
 		int currentIndex = 0;
-		for (int node = 0; node < isExcluded.length; node++) {
+		for (int node = 0; node < matrix.length; node++) {
 			if (isValid(node)) {
 				chooseFrom[currentIndex] = node;
 				currentIndex++;
